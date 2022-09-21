@@ -1,4 +1,4 @@
-package shop;
+package shop.main.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,17 +16,18 @@ import shop.components.MailComponents;
 public class MainController {
 
     // Mail 보내고 받는 Test
-//    private final MailComponents mailComponents;
+    private final MailComponents mailComponents;
 
     @RequestMapping("/")
     public String index() {
-//
-//        String email = "wjdans3476@naver.com";
-//        String subject = "SHOP 입니다.";
-//        String text = "SHOP 에서 즐거운 쇼핑 되시길 바랍니다.";
 
-//        mailComponents.sendMail(email, subject, text);
+        /*
+        String email = "wjdans3476@naver.com";
+        String subject = "SHOP 입니다.";
+        String text = "SHOP 에서 즐거운 쇼핑 되시길 바랍니다.";
 
+        mailComponents.sendMail(email, subject, text);
+        */
         return "index";
     }
 
