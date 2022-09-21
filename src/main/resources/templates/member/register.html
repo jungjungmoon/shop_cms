@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>SHOP 회원 가입</title>
@@ -9,37 +9,37 @@
     <!--
     아이디,이름,전화번호,비밀번호
     -->
-    <form method="post">
+    <form action="/member/register" method="post">
         <div>
-            <input type="email" name="userId" placeholder="아이디(이메일) 입력하세요" required/>
+            ID : <input type="email" name="userId" placeholder="아이디(이메일) 입력하세요" required/>
         </div>
         </br>
         <div>
-            <input type="text" name="userName" placeholder="이름을 입력하세요" required/>
+            NAME : <input type="text" name="userName" placeholder="이름을 입력하세요" required/>
         </div>
         </br>
         <div>
-            <input type="password" name="password" placeholder="비밀번호를 입력하세요" required/>
+            PASSWORD : <input type="password" name="password" placeholder="비밀번호를 입력하세요" required/>
         </div>
         <div>
-            <input type="password" name="rePassword" placeholder="비밀번호를 재입력하세요" required/>
+            PASSWORD : <input type="password" name="rePassword" placeholder="비밀번호를 재입력하세요" required/>
         </div>
         </br>
         <div>
-            <input type="tel" name="phone" placeholder="전화번호를 입력하세요" required/>
+            PHONE : <input type="tel" name="phone" placeholder="전화번호를 입력하세요" required/>
         </div>
         </br>
 
         <div>
-            <input type="text" id="postcode" placeholder="우편번호">
+            <input type="text" name="postcode" id="postcode" placeholder="우편번호">
             <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-            <input type="text" id="address" placeholder="주소"><br>
-            <input type="text" id="detailAddress" placeholder="상세주소">
-            <input type="text" id="extraAddress" placeholder="참고항목">
+            <input type="text" name="address" id="address" placeholder="주소"><br>
+            <input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
+            <input type="text" name="extraAddress" id="extraAddress" placeholder="참고항목">
         </div>
         </br>
         <div>
-            <button>SUBMIT</button>
+            <button> SUBMIT </button>
         </div>
     </form>
 
