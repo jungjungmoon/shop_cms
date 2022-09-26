@@ -1,7 +1,8 @@
-package shop;
+package shop.configuration;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import shop.ShopCmsApplication;
 
 public class ServletInitializer extends SpringBootServletInitializer {
 

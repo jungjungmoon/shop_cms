@@ -25,6 +25,7 @@ public class MemberController {
 
         return "member/register";
     }
+
     // PostMapping url 화면에서 버튼을 눌렀을 때, 바뀌는 부분
     @PostMapping("/member/register")
     public String registerSubmit(

@@ -2,6 +2,7 @@ package shop.member.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import shop.member.model.MemberInput;
+import shop.member.model.ResetPasswordInput;
 
 public interface MemberService extends UserDetailsService {
 
