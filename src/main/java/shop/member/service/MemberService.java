@@ -1,8 +1,13 @@
 package shop.member.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import shop.manager.dto.MemberDto;
+import shop.manager.model.MemberParam;
+import shop.member.entity.Member;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
+
+import java.util.List;
 
 public interface MemberService extends UserDetailsService {
 
@@ -27,4 +32,9 @@ public interface MemberService extends UserDetailsService {
      * 입력 받은 uuid 값이 유효한지 확인
      */
     boolean checkResetPassword(String uuid);
+
+    /**
+     * 관리인페이지 - SHOP 회원관리 등록하는 부분
+     */
+    List<MemberDto> list(MemberParam parameter);
 }

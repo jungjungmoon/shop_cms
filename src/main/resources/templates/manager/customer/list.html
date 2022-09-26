@@ -3,6 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>SHOP 관리자</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+        .search-form {
+            position: relative;
+            padding: 5px 0 10px 0;
+            text-align: right;
+        }
+        .search-form .total-count {
+            position: absolute;
+            left: 0; top: 0;
+            height: 20px;
+            float: left;
+        }
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pager a.on {
+            font-weight: bold;
+            color: brown;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,7 +47,80 @@
     <a href="#"> 상품 관리 </a>
     ||
     <a href="/member/logout"> 로그아웃 </a>
+    <br/>
+    <hr/>
+</div>
 
+<div class="list">
+
+    <div class="search-form">
+        <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
+        <form method="get">
+            <select name="searchType">
+                <option value="all">전체</option>
+                <option th:selected="${#strings.equals(param.searchType, 'userId')}" value="userId">아이디</option>
+                <option th:selected="${#strings.equals(param.searchType, 'userName')}" value="userName">이름</option>
+                <option th:selected="${#strings.equals(param.searchType, 'phone')}" value="phone">연락처</option>
+            </select>
+            <input th:value="${param.searchValue}" type="search" name="searchValue" placeholder="검색어 입력"/>
+            <button type="submit"> 검색</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>NO</th>
+            <th>
+                회원 이메일
+            </th>
+            <th>
+                회원 이름
+            </th>
+            <th>
+                전화번호
+            </th>
+            <th>
+                주소
+            </th>
+            <th>
+                이메일 인증
+            </th>
+            <th>
+                가입일
+            </th>
+            <th>
+                관리자여부
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${list}">
+            <td th:text="${x.seq}">1</td>
+            <td th:text="${x.userId}"> wjdans3476@naver.com</td>
+            <td th:text="${x.userName}"> 정정문</td>
+            <td th:text="${x.phone}">010-0000-0000</td>
+            <td>
+                <p th:text="${x.address}"> 서울 </p>
+                <p th:text="${x.detailAddress}"> 서울시 ~~</p>
+            </td>
+            <td>
+                <p th:if="${x.emailAuthYn}">Y</p>
+                <p th:if="${x.emailAuthYn eq false}">N</p>
+            </td>
+            <td>
+                <p th:text="${x.regDt}">2021.00.00</p>
+            </td>
+            <td>
+                <p th:if="${x.managerYn}">Y</p>
+                <p th:if="${x.managerYn eq false}">N</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pager" th:utext="${pager}">
+    </div>
 
 </div>
 </body>

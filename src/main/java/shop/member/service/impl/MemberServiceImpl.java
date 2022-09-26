@@ -8,7 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import shop.components.MailComponents;
+import shop.manager.dto.MemberDto;
+import shop.manager.mapper.MemberMapper;
+import shop.manager.model.MemberParam;
 import shop.member.entity.Member;
 import shop.member.exception.MemberNotEmailAuthException;
 import shop.member.model.MemberInput;
@@ -17,10 +21,7 @@ import shop.member.repository.MemberRepository;
 import shop.member.service.MemberService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor // 생성자 주입
@@ -28,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
+    private final MemberMapper memberMapper;
 
     /**
      * 회원 가입 중복확인
@@ -188,6 +190,32 @@ public class MemberServiceImpl implements MemberService {
 
         return true;
 
+    }
+
+    /**
+     * mybatis 에서 데이터 값을 가져오는 부분 생성 - manager 부분에서 dto, memberMapper 추가 작업
+     * 페이지 갯수 처리 부분 까지
+     */
+    @Override
+    public List<MemberDto> list(MemberParam parameter) {
+
+        long totalCount = memberMapper.selectListCount(parameter);
+
+        // 페이지 처리
+        // MemberDto 쪽에 totalCount 가지고 있다.
+        List<MemberDto> list = memberMapper.selectList(parameter);
+        if (!CollectionUtils.isEmpty(list)) {
+            int i = 0;
+            for (MemberDto x : list) {
+                x.setTotalCount(totalCount);
+                x.setSeq(totalCount - parameter.getPageStart() - i);
+                i++;
+            }
+        }
+
+        return list;
+
+//        return memberRepository.findAll();
     }
 
     /**
