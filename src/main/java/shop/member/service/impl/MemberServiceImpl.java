@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
 import org.springframework.util.CollectionUtils;
 import shop.components.MailComponents;
 import shop.manager.dto.MemberDto;
@@ -17,11 +18,14 @@ import shop.member.entity.Member;
 import shop.member.exception.MemberNotEmailAuthException;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
+
 import shop.member.repository.MemberRepository;
 import shop.member.service.MemberService;
 
 import java.time.LocalDateTime;
+
 import java.util.*;
+
 
 @Service
 @RequiredArgsConstructor // 생성자 주입
@@ -29,7 +33,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
-    private final MemberMapper memberMapper;
 
     /**
      * 회원 가입 중복확인
@@ -93,11 +96,11 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member member = optionalMember.get();
+
         // 계정 활성화가 이미 되었으면 차단
         if (member.isEmailAuthYn()){
             return false;
         }
-
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
         memberRepository.save(member);
@@ -106,6 +109,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
+
      * 비밀번호 초기화 전송 저장
      */
     @Override
@@ -245,6 +249,7 @@ public class MemberServiceImpl implements MemberService {
         if (member.isManagerYn()){
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
         }
+
 
         // 스프링 시큐리티 에서 원하는 ROLE 3가지 추가 작업
         return new User(member.getUserId(), member.getPassword(), grantedAuthorities);
