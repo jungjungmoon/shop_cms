@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 관리자</title>
+    <style>
+        .detail table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail table th, .detail table td {
+            border: solid 1px #000;
+        }
+    </style>
+</head>
+<body>
+
+<h1>SHOP 관리자 - 회원상세정보</h1>
+<div th:replace="fragments/layout.html :: fragment-manager-body-menu"></div>
+
+<div class="detail">
+
+    <table>
+        <tbody>
+        <tr>
+            <th>아이디</th>
+            <td>
+                <p th:text="${member.userId}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td>
+                <p th:text="${member.userName}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td>
+                <p th:text="${member.phone}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>가입일</th>
+            <td>
+                <p th:text="${member.regDt}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>이메일 인증</th>
+            <td>
+                <p th:text="${member.emailAuthYn}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td>
+                <p th:text="${member.address}"></p>
+                <p th:text="${member.detailAddress}"></p>
+                <p th:text="${member.extraAddress}"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>회원 상태</th>
+            <td>
+                <p>
+                    현재상태: <span th:text="${member.userStatus}"></span>
+                </p>
+                <div>
+                    <form method="post" action="/manager/customer/status.do">
+                        <input th:value="${member.userId}" type="hidden" name="userId">
+                        <select name="userStatus">
+                            <option value="USE">회원 이용중</option>
+                            <option value="SUSPENSION">회원 정지상태</option>
+                            <option value="REQ">가입 승인중</option>
+                        </select>
+                        <button type="submit">변경</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>회원 비밀번호 변경</th>
+            <td>
+                <div>
+                    <form method="post" action="/manager/customer/password.do">
+                        <input th:value="${member.userId}" type="hidden" name="userId">
+                        <input type="text" name="password">
+                        <button type="submit">변경</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <div>
+        <a href="list.do"> 회원목록이동 </a>
+    </div>
+</div>
+
+</body>
+</html>

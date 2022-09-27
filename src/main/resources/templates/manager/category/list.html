@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 관리자</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+
+        .search-form {
+            position: relative;
+            padding: 5px 0 10px 0;
+            text-align: right;
+        }
+
+        .search-form .total-count {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 20px;
+            float: left;
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pager a.on {
+            font-weight: bold;
+            color: brown;
+        }
+    </style>
+</head>
+<body>
+<h1>SHOP 관리자 - 회원카테고리관리</h1>
+<div th:replace="fragments/layout.html :: fragment-manager-body-menu"></div>
+
+<div class="list">
+
+    <div>
+        <form method="post" action="/manager/category/add.do">
+            <input type="text" name="categoryName" required placeholder="카테고리명 입력"/>
+            <button type="submit"> 추가</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th> ID</th>
+            <th>
+                카테고리명
+            </th>
+            <th>
+                등록시간
+            </th>
+            <th>
+                순서
+            </th>
+            <th>
+                사용여부
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${list}">
+            <td th:text="${x.id}">1</td>
+
+            <td th:text="${x.categoryName}"> 정정문</td>
+            <td>
+                <p th:text="${x.regDt}">2021.00.00</p>
+            </td>
+            <td th:text="${x.sortValue}">010-0000-0000</td>
+            <td>
+                <p th:text="${x.usingYn}">Y</p>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

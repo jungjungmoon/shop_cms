@@ -3,13 +3,17 @@ package shop.member.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import shop.manager.dto.MemberDto;
 import shop.manager.model.MemberParam;
-import shop.member.entity.Member;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
 
 import java.util.List;
 
 public interface MemberService extends UserDetailsService {
+
+    /**
+     * 회원상태변경
+     */
+    boolean updateStatus(String userId, String userStatus);
 
     boolean register(MemberInput parameter);
 
@@ -34,7 +38,17 @@ public interface MemberService extends UserDetailsService {
     boolean checkResetPassword(String uuid);
 
     /**
-     * 관리인페이지 - SHOP 회원관리 등록하는 부분
+     * 관리자페이지 - SHOP 회원관리 등록하는 부분
      */
     List<MemberDto> list(MemberParam parameter);
+
+    /**
+     * 관리자 - 회원상세 페이지 메서드 구현
+     */
+    MemberDto detail(String userId);
+
+    /**
+     * 회원 비밀번호 변경 -> 회원 상세페이지 내에서
+     */
+    boolean updatePassword(String userId, String password);
 }

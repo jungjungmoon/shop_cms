@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder // MemberServiceImpl 에서 builder 사용 할 수 있다.
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+public class Member implements MemberCode {
 
     @Id
     private String userId;
@@ -44,5 +44,11 @@ public class Member {
      * 관리자 여부 확인
      */
     private boolean managerYn;
+
+    /**
+     * 회원상태 확인
+     * 1. 이용가능 2. 정지상태
+     */
+    private String userStatus;
 
 }
