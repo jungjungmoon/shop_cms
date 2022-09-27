@@ -34,21 +34,5 @@ public class Member implements MemberCode {
     private String emailAuthKey; // 회원가입 할때 key 생성, 이메일로 보내주고, 이메일 링크를 타고 와서 emailAuthYn true 바꿔줘서 확인.
     private LocalDateTime emailAuthDt; // 이메일 인증 날짜 확인
 
-    /**
-     * 1. 비밀번호 초기화 일치 하는지 확인 , 2. 특정 기간 안에 초기화 가능
-     */
-    private String resetPasswordKey;
-    private LocalDateTime resetPasswordLimitDt;
-
-    /**
-     * 관리자 여부 확인
-     */
-    private boolean managerYn;
-
-    /**
-     * 회원상태 확인
-     * 1. 이용가능 2. 정지상태
-     */
-    private String userStatus;
 
 }
