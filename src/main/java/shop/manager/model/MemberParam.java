@@ -12,9 +12,13 @@ public class MemberParam {
      */
     String searchType;
     String searchValue;
+
     // 페이지 처리
     long pageIndex;
     long pageSize;
+
+    // 회원상세 페이지 볼때 파라미터값
+    String userId;
 
      /*
      0 , 10 -> pageIndex: 1
@@ -49,6 +53,7 @@ public class MemberParam {
         init();
 
         StringBuilder sb = new StringBuilder();
+
         if (searchType != null && searchType.length() > 0){
             sb.append(String.format("searchType=%s", searchType));
         }

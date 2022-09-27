@@ -1,7 +1,7 @@
 package shop.manager.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import shop.member.entity.Member;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberDto {
 
     String userId;
@@ -32,7 +35,32 @@ public class MemberDto {
 
     boolean managerYn;
 
+    String userStatus;
+
     long totalCount;
     // 페이지 No 번호 정렬
     long seq;
+
+
+    // of 메서드로 구현 해서 ServiceImpl 가져올 수 있음
+    public static MemberDto of(Member member) {
+
+        return MemberDto.builder()
+                .userId(member.getUserId())
+                .userName(member.getUserName())
+                .phone(member.getPhone())
+                .address(member.getAddress())
+                .detailAddress(member.getDetailAddress())
+                .extraAddress(member.getExtraAddress())
+                .postcode(member.getPostcode())
+                .emailAuthYn(member.isEmailAuthYn())
+                .emailAuthDt(member.getEmailAuthDt())
+                .emailAuthKey(member.getEmailAuthKey())
+                .regDt(member.getRegDt())
+                .resetPasswordKey(member.getResetPasswordKey())
+                .resetPasswordLimitDt(member.getResetPasswordLimitDt())
+                .managerYn(member.isManagerYn())
+                .userStatus(member.getUserStatus())
+                .build();
+    }
 }

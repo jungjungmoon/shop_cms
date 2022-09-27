@@ -16,12 +16,14 @@ import shop.manager.mapper.MemberMapper;
 import shop.manager.model.MemberParam;
 import shop.member.entity.Member;
 import shop.member.exception.MemberNotEmailAuthException;
+import shop.member.exception.MemberSuspensionNotEmailAuthException;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
 
 import shop.member.repository.MemberRepository;
 import shop.member.service.MemberService;
 
+import javax.swing.plaf.basic.BasicViewportUI;
 import java.time.LocalDateTime;
 
 import java.util.*;
@@ -33,6 +35,27 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
+
+    /**
+     * 회원상태 변경 controller -> manager/customer/status
+     */
+    @Override
+    public boolean updateStatus(String userId, String userStatus) {
+
+        // username => email 값
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException(" 회원 정보가 존재하지 않습니다. " + " 다시 확인해 주십시오. ");
+        }
+
+        // 회원 정보 가져오는 부분 email
+        Member member = optionalMember.get();
+
+        member.setUserStatus(userStatus);
+        memberRepository.save(member);
+
+        return true;
+    }
 
     /**
      * 회원 가입 중복확인
@@ -68,6 +91,8 @@ public class MemberServiceImpl implements MemberService {
                 .detailAddress(parameter.getDetailAddress())
                 .extraAddress(parameter.getExtraAddress())
                 .postcode(parameter.getPostcode())
+                // 회원가입 할때 요청 상태
+                .userStatus(Member.MEMBER_STATUS_REQ)
                 .build();
         memberRepository.save(member);
 
@@ -101,6 +126,7 @@ public class MemberServiceImpl implements MemberService {
         if (member.isEmailAuthYn()){
             return false;
         }
+
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
         memberRepository.save(member);
@@ -216,10 +242,47 @@ public class MemberServiceImpl implements MemberService {
                 i++;
             }
         }
-
         return list;
 
-//        return memberRepository.findAll();
+    }
+
+    /**
+     * 관리자 - 회원상세정보 페이지
+     */
+    @Override
+    public MemberDto detail(String userId) {
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return null;
+        }
+        
+        Member member = optionalMember.get();
+        return MemberDto.of(member);
+
+    }
+
+    /**
+     * 회원 비밀번호 변경 - 관리자에서
+     */
+    @Override
+    public boolean updatePassword(String userId, String password) {
+
+        // username => email 값
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException(" 회원 정보가 존재하지 않습니다. " + " 다시 확인해 주십시오. ");
+        }
+
+        // 회원 정보 가져오는 부분 email
+        Member member = optionalMember.get();
+
+        String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        member.setPassword(encPassword);
+        memberRepository.save(member);
+
+        return true;
     }
 
     /**
@@ -236,10 +299,15 @@ public class MemberServiceImpl implements MemberService {
 
         // 회원 정보 가져오는 부분 email
         Member member = optionalMember.get();
-        // 메일 인증 정상적으로 처리 확인
-        if (!member.isEmailAuthYn()) {
-            throw new MemberNotEmailAuthException("이메일 활성화 이후 로그인을 하시길 바랍니다.");
 
+        // 메일 인증 정상적으로 처리 확인
+        if (Member.MEMBER_STATUS_REQ.equals(member.getUserStatus())) {
+            throw new MemberNotEmailAuthException("이메일 활성화 이후 로그인을 하시길 바랍니다.");
+        }
+
+        // 회원 정지상태 일때
+        if (Member.MEMBER_STATUS_SUSPENSION.equals(member.getUserStatus())){
+            throw new MemberSuspensionNotEmailAuthException("정지된 회원 입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
