@@ -6,13 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.manager.dto.CategoryDto;
-import shop.manager.dto.MemberDto;
 import shop.manager.model.CategoryInput;
 import shop.manager.model.MemberParam;
-import shop.manager.model.MemberStatusInput;
 import shop.manager.service.CategoryService;
-import shop.member.service.MemberService;
-import shop.util.PageUtil;
 
 import java.util.List;
 
@@ -41,6 +37,26 @@ public class managerCategoryController {
     public String add(Model model, CategoryInput parameter){
 
         boolean add = categoryService.add(parameter.getCategoryName());
+
+        return "redirect:/manager/category/list.do";
+    }
+
+    /**
+     * 카테고리 삭제
+     */
+
+    @PostMapping("/manager/category/delete.do")
+    public String delete(Model model, CategoryInput parameter){
+
+        boolean del = categoryService.delete(parameter.getId());
+
+        return "redirect:/manager/category/list.do";
+    }
+
+    @PostMapping("/manager/category/update.do")
+    public String update(Model model, CategoryInput parameter){
+
+        boolean update = categoryService.update(parameter);
 
         return "redirect:/manager/category/list.do";
     }
