@@ -20,6 +20,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
+    // 카테고리 선택
+    long categoryId;
+
     private String description;
     private String imagePath;
     private String keyword;

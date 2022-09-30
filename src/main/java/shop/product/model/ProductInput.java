@@ -8,6 +8,8 @@ import lombok.Setter;
 public class ProductInput {
 
     String subject;
+    long id;
+    long categoryId;
 
 
 }
