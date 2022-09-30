@@ -1,14 +1,14 @@
 package shop.product.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import shop.product.entity.Product;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
@@ -32,4 +32,22 @@ public class ProductDto {
     long totalCount;
     // 페이지 No 번호 정렬
     long seq;
+
+    public static ProductDto of(Product product) {
+
+        return ProductDto.builder()
+                .id(product.getId())
+                .description(product.getDescription())
+                .imagePath(product.getImagePath())
+                .keyword(product.getKeyword())
+                .subject(product.getSubject())
+                .summary(product.getSummary())
+                .contents(product.getContents())
+                .price(product.getPrice())
+                .salePrice(product.getSalePrice())
+                .regDt(product.getRegDt())
+                .udtDt(product.getUdtDt())
+                .build();
+
+    }
 }

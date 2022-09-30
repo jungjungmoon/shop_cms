@@ -17,4 +17,15 @@ public interface ProductService {
      * 상품 목록
      */
     List<ProductDto> list(ProductParam parameter);
+
+    /**
+     * 상품 상세정보
+     */
+    ProductDto getById(long id);
+
+    /**
+     * 상품 상세정보 수정
+     */
+    boolean set(ProductInput parameter);
+
 }
