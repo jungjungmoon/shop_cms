@@ -1,6 +1,10 @@
 package shop.product.service;
 
+import shop.product.dto.ProductDto;
 import shop.product.model.ProductInput;
+import shop.product.model.ProductParam;
+
+import java.util.List;
 
 public interface ProductService {
 
@@ -9,4 +13,8 @@ public interface ProductService {
      */
     boolean add(ProductInput parameter);
 
+    /**
+     * 상품 목록
+     */
+    List<ProductDto> list(ProductParam parameter);
 }

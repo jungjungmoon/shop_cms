@@ -9,13 +9,14 @@ import shop.manager.dto.MemberDto;
 import shop.manager.model.MemberParam;
 import shop.manager.model.MemberStatusInput;
 import shop.member.service.MemberService;
+import shop.product.controller.BaseController;
 import shop.util.PageUtil;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class managerCustomerController {
+public class managerCustomerController extends BaseController {
 
     private final MemberService memberService;
 
@@ -36,11 +37,17 @@ public class managerCustomerController {
         }
         String queryString = parameter.getQueryString();
 
-        PageUtil pageUtil = new PageUtil(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
+        // 페이징 처리 ( 화면에 보이는 부분 )
+        String pagerHtml = getPaperHtml
+                (
+                        totalCount, parameter.getPageSize(),
+                        parameter.getPageIndex(),
+                        parameter.getQueryString()
+                );
 
         model.addAttribute("list", members);
         model.addAttribute("totalCount", totalCount);
-        model.addAttribute("pager", pageUtil.pager());
+        model.addAttribute("pager", pagerHtml);
 
         return "manager/customer/list";
     }
