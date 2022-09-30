@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 관리자</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+
+        p.nothing {
+            text-align: center;
+            padding: 100px;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+        });
+
+    </script>
+</head>
+<body>
+<h1>SHOP 관리자 - 상품관리</h1>
+<div th:replace="fragments/layout.html :: fragment-manager-body-menu"></div>
+
+<div class="list">
+    <div>
+        <a href="/manager/product/add.do"> 상품 등록 </a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th> ID</th>
+            <th>
+                상품명
+            </th>
+            <th>
+                등록시간
+            </th>
+            <th>
+                순서
+            </th>
+            <th>
+                사용여부
+            </th>
+            <th>
+                비고
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${list}">
+            <td th:text="${x.seq}">1</td>
+            <td>
+                <p th:text="${x.subject}"></p>
+            </td>
+            <td>
+                <p th:text="${x.regDt}">2021.00.00</p>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
