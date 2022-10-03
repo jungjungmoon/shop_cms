@@ -53,7 +53,7 @@
         where 1 = 1
         <include refid="selectListWhere"/>
 
-
+        order by reg_dt desc
         limit #{pageStart}, #{pageEnd}
     </select>
 

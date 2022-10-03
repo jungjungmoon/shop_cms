@@ -3,6 +3,7 @@ package shop.product.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +24,6 @@ public class Product {
     // 카테고리 선택
     long categoryId;
 
-    private String description;
     private String imagePath;
     private String keyword;
     private String subject;
@@ -36,7 +36,7 @@ public class Product {
     private String contents;
     long price;
     long salePrice;
-    LocalDateTime saleEndDt;
+    LocalDate saleEndDt;
 
     // 등록일, 수정일 추가 작업
     LocalDateTime regDt;

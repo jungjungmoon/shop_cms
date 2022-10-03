@@ -3,6 +3,7 @@ package shop.product.dto;
 import lombok.*;
 import shop.product.entity.Product;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
 public class ProductDto {
 
     private Long id;
-    private String description;
+    private Long categoryId;
     private String imagePath;
     private String keyword;
     private String subject;
@@ -22,7 +23,7 @@ public class ProductDto {
     private String contents;
     long price;
     long salePrice;
-    LocalDateTime saleEndDt;
+    LocalDate saleEndDt;
 
     // 등록일, 수정일 추가 작업
     LocalDateTime regDt;
@@ -37,7 +38,6 @@ public class ProductDto {
 
         return ProductDto.builder()
                 .id(product.getId())
-                .description(product.getDescription())
                 .imagePath(product.getImagePath())
                 .keyword(product.getKeyword())
                 .subject(product.getSubject())
@@ -47,6 +47,7 @@ public class ProductDto {
                 .salePrice(product.getSalePrice())
                 .regDt(product.getRegDt())
                 .udtDt(product.getUdtDt())
+                .categoryId(product.getCategoryId())
                 .build();
 
     }

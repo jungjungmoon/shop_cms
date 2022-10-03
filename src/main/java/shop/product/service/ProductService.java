@@ -28,4 +28,8 @@ public interface ProductService {
      */
     boolean set(ProductInput parameter);
 
+    /**
+     * 상품 삭제
+     */
+    boolean delete(String idList);
 }
