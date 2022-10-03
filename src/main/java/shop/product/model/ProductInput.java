@@ -7,9 +7,18 @@ import lombok.Setter;
 @Setter
 public class ProductInput {
 
-    String subject;
     long id;
+    String subject;
     long categoryId;
+    String keyword;
+    String summary;
+    String contents;
+    long price;
+    long salePrice;
+    String saleEndDt;
+
+    // 상품삭제
+    String idList;
 
 
 }

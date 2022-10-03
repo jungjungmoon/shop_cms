@@ -11,7 +11,9 @@ import shop.product.model.ProductParam;
 import shop.product.repository.ProductRepository;
 import shop.product.service.ProductService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +24,33 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
+    // 할인 종료일
+    private LocalDate getLocalDate(String value) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            return LocalDate.parse(value, formatter);
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
     @Override
     public boolean add(ProductInput parameter) {
+
+        LocalDate saleEndDt = getLocalDate(parameter.getSaleEndDt());
 
         Product product = Product.builder()
                 .subject(parameter.getSubject())
                 .regDt(LocalDateTime.now())
                 .categoryId(parameter.getCategoryId())
+                .keyword(parameter.getKeyword())
+                .summary(parameter.getSummary())
+                .contents(parameter.getContents())
+                .price(parameter.getPrice())
+                .salePrice(parameter.getSalePrice())
+                .saleEndDt(saleEndDt)
                 .build();
 
         productRepository.save(product);
@@ -76,6 +97,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean set(ProductInput parameter) {
 
+        LocalDate saleEndDt = getLocalDate(parameter.getSaleEndDt());
+
         Optional<Product> optionalProducts = productRepository.findById(parameter.getId());
         if (!optionalProducts.isPresent()) {
             // 수정 x
@@ -87,7 +110,35 @@ public class ProductServiceImpl implements ProductService {
         product.setSubject(parameter.getSubject());
         product.setUdtDt(LocalDateTime.now());
         product.setCategoryId(parameter.getCategoryId());
+        product.setKeyword(parameter.getKeyword());
+        product.setSummary(parameter.getSummary());
+        product.setContents(parameter.getContents());
+        product.setPrice(parameter.getPrice());
+        product.setSalePrice(parameter.getSalePrice());
+        product.setSaleEndDt(saleEndDt);
         productRepository.save(product);
+
+        return true;
+    }
+
+    @Override
+    public boolean delete(String idList) {
+
+        if (idList != null && idList.length() > 0) {
+
+            String[] ids = idList.split(",");
+            for (String x : ids) {
+                long id = 0L;
+                try {
+                    id = Long.parseLong(x);
+                } catch (Exception e) {
+                }
+
+                if (id > 0) {
+                    productRepository.deleteById(id);
+                }
+            }
+        }
 
         return true;
     }

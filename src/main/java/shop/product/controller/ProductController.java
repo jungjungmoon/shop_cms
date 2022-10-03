@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import shop.manager.entity.Category;
 import shop.manager.service.CategoryService;
 import shop.product.dto.ProductDto;
 import shop.product.model.ProductInput;
@@ -107,6 +106,18 @@ public class ProductController extends BaseController {
         } else {
             boolean add = productService.add(parameter);
         }
+
+        return "redirect:/manager/product/list.do";
+    }
+
+    /**
+     * 상품등록 삭제
+     */
+    @PostMapping("/manager/product/delete.do")
+    public String delete(Model model, ProductInput parameter, HttpServletRequest request) {
+
+        boolean delete = productService.delete(parameter.getIdList());
+
 
         return "redirect:/manager/product/list.do";
     }

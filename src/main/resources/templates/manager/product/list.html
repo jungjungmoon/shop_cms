@@ -18,12 +18,73 @@
             padding: 100px;
         }
 
+        .list .buttons {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .list .buttons a, .list .buttons button {
+            border-width: 0;
+            background-color: transparent;
+            text-decoration: underline;
+            font-size: 15px;
+            line-height: 20px;
+            height: 20px;
+            color: #000;
+        }
+
+        .list .buttons .total-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pager a.on {
+            font-weight: bold;
+            color: brown;
+        }
+
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
+
+            $('#selectAll').on('click', function () {
+
+                var checked = $(this).is(':checked');
+
+                $('#dataList input[type=checkbox]').each(function (k, v){
+
+                    $(this).prop('checked', checked);
+                });
+            });
+
+            $('#delete').on('click', function () {
+
+                var $checked = $('#dataList input[type=checkbox]:checked');
+
+                if ($checked.length < 1) {
+                    alert(' 상품을 삭제하시겠습니까? ');
+                    return false;
+                }
+
+                var idList = [];
+                $.each($checked, function (k, v) {
+                    idList.push($(this).val());
+
+                });
+
+                var $deleteForm = $('form[name=deleteForm]');
+                $deleteForm.find('input[name=idList]').val(idList.join(','));
+                $deleteForm.submit();
+            });
         });
 
     </script>
@@ -33,36 +94,38 @@
 <div th:replace="fragments/layout.html :: fragment-manager-body-menu"></div>
 
 <div class="list">
-    <div>
+
+    <div class="buttons">
+        <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
+
         <a href="/manager/product/add.do"> 상품 등록 </a>
+        <button id="delete" type="button"> 삭제</button>
     </div>
+
     <table>
         <thead>
         <tr>
-            <th> ID</th>
+            <th>
+                <input id="selectAll" type="checkbox"/>
+            </th>
+            <th> NO</th>
             <th>
                 상품명
             </th>
             <th>
                 등록시간
             </th>
-            <th>
-                순서
-            </th>
-            <th>
-                사용여부
-            </th>
-            <th>
-                비고
-            </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dataList">
         <tr th:each="x : ${list}">
+            <td>
+                <input type="checkbox" th:value="${x.id}"/>
+            </td>
             <td th:text="${x.seq}">1</td>
             <td>
                 <p>
-                    <a th:href="'/manager/product/edit.do?id=' + ${x.id}" th:text="${x.subject}">상품명</a>
+                    <a th:href="'edit.do?id=' + ${x.id}" th:text="${x.subject}">상품명</a>
                 </p>
             </td>
             <td>
@@ -72,7 +135,14 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="pager" th:value="${pager}">
+    </div>
 </div>
+
+<form name="deleteForm" method="post" action="/manager/product/delete.do">
+    <input type="hidden" name="idList"/>
+</form>
 
 
 </body>
