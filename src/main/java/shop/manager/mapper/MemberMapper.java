@@ -17,4 +17,6 @@ public interface MemberMapper {
     // 페이징 갯수 카운트
     long selectListCount(MemberParam parameter);
 
+
+
 }

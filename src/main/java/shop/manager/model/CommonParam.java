@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommonParam {
-
+    // 페이징 처리
     String searchType;
     String searchValue;
 

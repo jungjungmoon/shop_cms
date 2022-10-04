@@ -121,6 +121,9 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    /**
+     * 상품 삭제 기능 구현
+     */
     @Override
     public boolean delete(String idList) {
 
@@ -141,5 +144,20 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return true;
+    }
+
+    /**
+     * 상품목록 구현, 일반 회원이 localhost8080 서버 일때, 보여지는 부분
+     * 기존 페이징 처리 x
+     */
+    @Override
+    public List<ProductDto> frontList(ProductParam parameter) {
+
+        if (parameter.getCategoryId() < 1){
+            List<Product> products = productRepository.findAll();
+            return ProductDto.of(products);
+        }
+        return productRepository.findByCategoryId(parameter.getCategoryId()).map(ProductDto::of).orElse(null);
+
     }
 }

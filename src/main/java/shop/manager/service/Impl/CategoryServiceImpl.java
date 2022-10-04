@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import shop.manager.dto.CategoryDto;
 import shop.manager.entity.Category;
+import shop.manager.mapper.CategoryMapper;
 import shop.manager.model.CategoryInput;
 import shop.manager.repository.CategoryRepository;
 import shop.manager.service.CategoryService;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     private Sort getSortBySortValueDesc() {
 
@@ -73,5 +75,12 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
 
         return true;
+    }
+
+    @Override
+    public List<CategoryDto> frontList(CategoryDto parameter) {
+
+        return categoryMapper.select(parameter);
+
     }
 }

@@ -21,6 +21,8 @@ public class CategoryDto {
     int sortValue;
     boolean usingYn;
 
+    int productCount;
+
     public static List<CategoryDto> of (List<Category> categories) {
         if (categories != null) {
             List<CategoryDto> categoryDtoList = new ArrayList<>();

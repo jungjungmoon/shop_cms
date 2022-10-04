@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 상품 </title>
+    <style>
+    </style>
+</head>
+<body>
+<h1> SHOP 상품 </h1>
+
+<!-- <div th:replace="fragments/layout.html :: fragment-body-menu"></div> -->
+
+
+<div>
+    <a href="?">전체
+        (<span th:text="${productTotalCount}">0</span>)
+    </a>
+
+    <th:block th:each="y : ${categoryDtos}">
+        |
+        <a th:href="'/product?categoryId=' + ${y.id}">
+            <span th:text="${y.categoryName}"> 카테고리명</span>
+            (<span th:text="${y.productCount}">0</span>)</a>
+    </th:block>
+    <hr/>
+
+</div>
+
+<ul>
+    <li th:each="x : ${productDtos}">
+        <div>
+            <a th:href="'/product/' + ${x.id}">
+                <h3 th:text="${x.subject}">상품명</h3>
+            </a>
+            <div>
+                <p th:text="${x.summary}"></p>
+                판매 : <span class="price" th:text="${x.price}"></span>
+                할인 : <span th:text="${x.salePrice}"></span>
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </li>
+</ul>
+
+
+</tr>
+</tbody>
+
+</div>
+
+</body>
+</html>
