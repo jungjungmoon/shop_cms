@@ -35,7 +35,7 @@ public class MemberProductController extends BaseController {
         List<CategoryDto> categoryDtos = categoryService.frontList(CategoryDto.builder().build());
 
         int productTotalCount = 0;
-        if (categoryDtos != null){
+        if (categoryDtos != null) {
             for (CategoryDto x : categoryDtos) {
                 productTotalCount += x.getProductCount();
             }
@@ -44,6 +44,17 @@ public class MemberProductController extends BaseController {
         model.addAttribute("productTotalCount", productTotalCount);
 
         return "product/index";
+    }
+    /**
+     * 상품목록 페이지 화면 view
+     */
+    @GetMapping("/product/{id}")
+    public String productList(Model model, ProductParam parameter) {
+
+        ProductDto productDto = productService.frontDetail(parameter.getId());
+        model.addAttribute("productDto", productDto);
+
+        return "product/list";
     }
 
 

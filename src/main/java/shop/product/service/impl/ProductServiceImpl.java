@@ -3,6 +3,10 @@ package shop.product.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import shop.order.entity.OrderStatus;
+import shop.order.entity.ProductOrder;
+import shop.order.model.OrderInput;
+import shop.order.repository.OrderRepository;
 import shop.product.dto.ProductDto;
 import shop.product.entity.Product;
 import shop.product.mapper.ProductMapper;
@@ -23,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final OrderRepository orderRepository;
 
     // 할인 종료일
     private LocalDate getLocalDate(String value) {
@@ -153,11 +158,64 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> frontList(ProductParam parameter) {
 
-        if (parameter.getCategoryId() < 1){
+        if (parameter.getCategoryId() < 1) {
             List<Product> products = productRepository.findAll();
             return ProductDto.of(products);
         }
         return productRepository.findByCategoryId(parameter.getCategoryId()).map(ProductDto::of).orElse(null);
 
+    }
+
+    /**
+     * 상품상세정보 목록 (일반회원) -> 상품목록 클릭시 들어가는 페이지
+     */
+    @Override
+    public ProductDto frontDetail(long id) {
+
+        Optional<Product> optionalProducts = productRepository.findById(id);
+        if (optionalProducts.isPresent()) {
+            return ProductDto.of(optionalProducts.get());
+        }
+
+        return null;
+    }
+
+    /**
+     * 상품주문 신청 api
+     * userId, 상품정보
+     */
+    @Override
+    public boolean req(OrderInput parameter) {
+
+        Optional<Product> optionalProduct = productRepository.findById(parameter.getProductId());
+        if (!optionalProduct.isPresent()) {
+            return false;
+        }
+
+        Product product = optionalProduct.get();
+
+        String[] status = {OrderStatus.STATUS_REQ, OrderStatus.STATUS_COMPLETE};
+        long count = orderRepository.countByProductIdAndUserIdAndStatusIn
+                (
+                        product.getId(),
+                        parameter.getUserId(),
+                        List.of(status)
+                );
+
+        // 상품주문이 실행, 중복 x
+        if (count > 0) {
+            return false;
+        }
+
+        ProductOrder productOrder = ProductOrder.builder()
+                .productId(product.getId())
+                .userId(parameter.getUserId())
+                .payPrice(product.getSalePrice())
+                .status(OrderStatus.STATUS_REQ)
+                .regDt(LocalDateTime.now())
+                .build();
+        orderRepository.save(productOrder);
+
+        return true;
     }
 }
