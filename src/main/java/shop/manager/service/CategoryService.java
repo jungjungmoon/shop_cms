@@ -28,4 +28,9 @@ public interface CategoryService {
      * 카테고리 삭제
      */
     boolean delete(long id);
+
+    /**
+     * 일반회원 카테고리 목록 (관리자 != 일반회원)
+     */
+    List<CategoryDto> frontList(CategoryDto parameter);
 }

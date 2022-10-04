@@ -5,6 +5,8 @@ import shop.product.entity.Product;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 @Getter
@@ -49,6 +51,19 @@ public class ProductDto {
                 .udtDt(product.getUdtDt())
                 .categoryId(product.getCategoryId())
                 .build();
+
+    }
+
+    public static List<ProductDto> of(List<Product> products) {
+
+        if (products == null){
+            return null;
+        }
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product x : products) {
+            productDtos.add(ProductDto.of(x));
+        }
+        return productDtos;
 
     }
 }

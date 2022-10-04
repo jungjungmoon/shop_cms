@@ -32,4 +32,10 @@ public interface ProductService {
      * 상품 삭제
      */
     boolean delete(String idList);
+
+    /**
+     * 일반회원 상품 목록 (관리자 != 일반회원)
+     */
+    List<ProductDto> frontList(ProductParam parameter);
+
 }
