@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 상품상세</title>
+    <style>
+        .detail table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .detail table th, .detail table td {
+            border: solid 1px #000;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossOrigin="anonymous"></script>
+
+    <script>
+        $(function () {
+            $('#submitForm').on('submit', function () {
+                var $thisForm = $(this);
+                var url = '/api/product/req.api';
+                var parameter = {
+                    productId: $thisForm.find('input[name=id]').val()
+                };
+
+                axios.post(url, parameter).then(function (response) {
+                    console.log(response);
+
+                }).catch(function (err) {
+                    console.log(err);
+
+                });
+
+                return false;
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+<h1> SHOP 상품 정보 </h1>
+
+<div th:replace="fragments/layout.html :: fragment-body-menu"></div>
+
+<div class="detail">
+
+    <h2>상품명: <span th:text="${productDto.subject}">상품</span></h2>
+    <div th:utext="${productDto.contents}">
+    </div>
+    <div>
+        <p>상품가격: <span th:text="${productDto.price}">0</span></p>
+        <p>상품할인: <span th:text="${productDto.salePrice}">0</span></p>
+    </div>
+
+    <div>
+        <form id="submitForm" method="post">
+            <input type="hidden" name="id" th:value="${productDto.id}"/>
+            <button type="submit"> 상품 주문</button>
+            <a href="/product">상품 목록</a>
+        </form>
+    </div>
+
+</div>
+
+
+</body>
+</html>

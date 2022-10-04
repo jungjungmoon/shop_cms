@@ -13,4 +13,5 @@ public class ProductParam extends CommonParam {
      */
 
     long categoryId;
+    long id;
 }

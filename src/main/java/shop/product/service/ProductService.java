@@ -1,5 +1,6 @@
 package shop.product.service;
 
+import shop.order.model.OrderInput;
 import shop.product.dto.ProductDto;
 import shop.product.model.ProductInput;
 import shop.product.model.ProductParam;
@@ -38,4 +39,13 @@ public interface ProductService {
      */
     List<ProductDto> frontList(ProductParam parameter);
 
+    /**
+     * 상품상세정보 목록
+     */
+    ProductDto frontDetail(long id);
+
+    /**
+     * 상품주문 신청
+     */
+    boolean req(OrderInput parameter);
 }
