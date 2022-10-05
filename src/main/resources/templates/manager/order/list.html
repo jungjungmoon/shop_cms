@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SHOP 관리자</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+
+        p.nothing {
+            text-align: center;
+            padding: 100px;
+        }
+
+        .list .buttons {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .list .buttons a, .list .buttons button {
+            border-width: 0;
+            background-color: transparent;
+            text-decoration: underline;
+            font-size: 15px;
+            line-height: 20px;
+            height: 20px;
+            color: #000;
+        }
+
+        .list .buttons .total-count {
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pager a.on {
+            font-weight: bold;
+            color: brown;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#selectAll').on('click', function () {
+
+                var checked = $(this).is(':checked');
+
+                $('#dataList input[type=checkbox]').each(function (k, v){
+
+                    $(this).prop('checked', checked);
+                });
+            });
+
+            $('#delete').on('click', function () {
+
+                var $checked = $('#dataList input[type=checkbox]:checked');
+
+                if ($checked.length < 1) {
+                    alert(' 상품을 삭제하시겠습니까? ');
+                    return false;
+                }
+
+                var idList = [];
+                $.each($checked, function (k, v) {
+                    idList.push($(this).val());
+
+                });
+
+                var $deleteForm = $('form[name=deleteForm]');
+                $deleteForm.find('input[name=idList]').val(idList.join(','));
+                $deleteForm.submit();
+            });
+        });
+
+    </script>
+</head>
+<body>
+<h1>SHOP 관리자 - 주문관리</h1>
+<div th:replace="fragments/layout.html :: fragment-manager-body-menu"></div>
+
+<div class="list">
+
+    <div class="buttons">
+        <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th> NO</th>
+            <th>
+                등록시간
+            </th>
+            <th>
+                상품명
+            </th>
+            <th colspan="3">
+                주문인
+            </th>
+            <th>
+                주문상태
+            </th>
+
+        </tr>
+        </thead>
+        <tbody id="dataList">
+        <tr th:each="x : ${list}">
+            <td th:text="${x.seq}">1</td>
+            <td>
+                <p th:text="${x.regDt}">2021.00.00</p>
+            </td>
+            <td>
+                <p th:text="${x.subject}">상품명</p>
+            </td>
+            <td>
+                <p th:text="${x.userName}"></p>
+            </td>
+            <td>
+                <p th:text="${x.userId}"></p>
+            </td>
+            <td>
+                <p th:text="${x.phone}"></p>
+            </td>
+            <td>
+                <p th:if="${x.status eq 'REQ'}">상품신청</p>
+                <p th:if="${x.status eq 'CANCEL'}">상품취소</p>
+                <p th:if="${x.status eq 'COMPLETE'}">상품입금완료</p>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pager" th:value="${pager}">
+    </div>
+</div>
+
+<form name="deleteForm" method="post" action="/manager/product/delete.do">
+    <input type="hidden" name="idList"/>
+</form>
+
+
+</body>
+</html>
