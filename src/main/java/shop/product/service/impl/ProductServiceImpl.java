@@ -185,11 +185,16 @@ public class ProductServiceImpl implements ProductService {
      * userId, 상품정보
      */
     @Override
-    public boolean req(OrderInput parameter) {
+    public ServiceResult req(OrderInput parameter) {
+
+        ServiceResult result = new ServiceResult();
 
         Optional<Product> optionalProduct = productRepository.findById(parameter.getProductId());
         if (!optionalProduct.isPresent()) {
-            return false;
+
+            result.setResult(false);
+            result.setMessage("상품 주문을 할 수 없습니다.");
+            return result;
         }
 
         Product product = optionalProduct.get();
@@ -204,7 +209,9 @@ public class ProductServiceImpl implements ProductService {
 
         // 상품주문이 실행, 중복 x
         if (count > 0) {
-            return false;
+            result.setResult(false);
+            result.setMessage("주문한 상품이 있습니다.");
+            return result;
         }
 
         ProductOrder productOrder = ProductOrder.builder()
@@ -216,6 +223,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
         orderRepository.save(productOrder);
 
-        return true;
+        result.setResult(true);
+        return result;
     }
 }

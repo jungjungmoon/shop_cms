@@ -4,6 +4,7 @@ import shop.order.model.OrderInput;
 import shop.product.dto.ProductDto;
 import shop.product.model.ProductInput;
 import shop.product.model.ProductParam;
+import shop.product.service.impl.ServiceResult;
 
 import java.util.List;
 
@@ -47,5 +48,5 @@ public interface ProductService {
     /**
      * 상품주문 신청
      */
-    boolean req(OrderInput parameter);
+    ServiceResult req(OrderInput parameter);
 }

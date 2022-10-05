@@ -10,6 +10,7 @@ import shop.manager.service.CategoryService;
 import shop.order.model.OrderInput;
 import shop.product.controller.BaseController;
 import shop.product.service.ProductService;
+import shop.product.service.impl.ServiceResult;
 
 import java.security.Principal;
 
@@ -33,14 +34,12 @@ public class ApiProductController extends BaseController {
         parameter.setUserId(principal.getName());
 
         // 상품주문이 전달이 안됐을때
-        boolean req = productService.req(parameter);
-        if (!req){
-            return ResponseEntity.badRequest().body("상품주문 취소 되었습니다.");
+        ServiceResult result = productService.req(parameter);
+
+        if (!result.isResult()) {
+            return ResponseEntity.ok().body(result.getMessage());
         }
 
         return ResponseEntity.ok().body(parameter);
-
-
     }
-
 }
