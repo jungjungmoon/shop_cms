@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.manager.model.MemberParam;
+import org.springframework.web.bind.annotation.PostMapping;
 import shop.order.dto.OrderDto;
 import shop.order.model.OrderParam;
 import shop.order.service.OrderService;
 import shop.product.controller.BaseController;
+import shop.product.service.impl.ServiceResult;
 
 import java.util.List;
 
@@ -50,6 +52,24 @@ public class OrderController extends BaseController {
         model.addAttribute("pager", pagerHtml);
 
         return "manager/order/list";
+    }
+
+    /**
+     * 주문 완료 페이지
+     * order -> manager/order/status.do/
+     */
+
+    @PostMapping("/manager/order/status.do")
+    public String status(Model model, OrderParam parameter, BindingResult bindingResult) {
+
+        ServiceResult status = orderService.updateStatus(parameter.getId(), parameter.getStatus());
+
+        if (!status.isResult()) {
+            model.addAttribute("message", status.getMessage());
+            return "common/error";
+        }
+
+        return "redirect:/manager/order/list.do";
     }
 
 

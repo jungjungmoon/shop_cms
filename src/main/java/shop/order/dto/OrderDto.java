@@ -1,12 +1,12 @@
 package shop.order.dto;
 
 import lombok.*;
-import shop.member.entity.Member;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -35,8 +35,13 @@ public class OrderDto {
     long totalCount;
     // 페이지 No 번호 정렬
     long seq;
-    private String address;
-    private String detailAddress;
+
+    public String getRegDtText() {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        return regDt != null ? regDt.format(dateTimeFormatter) : "";
+
+    }
 
 
 }

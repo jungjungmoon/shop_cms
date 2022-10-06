@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import shop.configuration.ResponseResult;
+import shop.configuration.ResponseResultHeader;
 import shop.manager.service.CategoryService;
 import shop.order.model.OrderInput;
 import shop.product.controller.BaseController;
@@ -37,9 +39,12 @@ public class ApiProductController extends BaseController {
         ServiceResult result = productService.req(parameter);
 
         if (!result.isResult()) {
-            return ResponseEntity.ok().body(result.getMessage());
+
+            ResponseResult responseResult = new ResponseResult(false, result.getMessage());
+            return ResponseEntity.ok().body(responseResult);
         }
 
-        return ResponseEntity.ok().body(parameter);
+        ResponseResult responseResult = new ResponseResult(true);
+        return ResponseEntity.ok().body(responseResult);
     }
 }
