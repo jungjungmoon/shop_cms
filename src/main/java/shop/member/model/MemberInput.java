@@ -18,4 +18,5 @@ public class MemberInput {
     private String address;
     private String detailAddress;
     private String extraAddress;
+    private String newPassword;
 }

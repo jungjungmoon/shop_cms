@@ -1,16 +1,20 @@
 package shop.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import shop.manager.dto.MemberDto;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
 import shop.member.service.MemberService;
+import shop.product.service.impl.ServiceResult;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor // 자동생성자 주입 -> MemberService
@@ -57,11 +61,59 @@ public class MemberController {
 
     /**
      * 회원 정보 페이지 처리
+     * 회원 정보 수정 구현
      */
     @GetMapping("/member/info")
-    public String memberInfo() {
+    public String memberInfo(Model model, Principal principal) {
+
+        String userId = principal.getName();
+        MemberDto detail = memberService.detail(userId);
+
+        model.addAttribute("detail", detail);
 
         return "member/info";
+    }
+
+    /**
+     * 회원 비밀번호 변경
+     */
+    @GetMapping("/member/password")
+    public String memberPassword(Model model, Principal principal) {
+
+        String userId = principal.getName();
+        MemberDto detail = memberService.detail(userId);
+
+        model.addAttribute("detail", detail);
+
+        return "member/password";
+    }
+    @PostMapping("/member/password")
+    public String memberPasswordSubmit(Model model, Principal principal, MemberInput parameter) {
+
+        String userId = principal.getName();
+        parameter.setUserId(userId);
+
+        ServiceResult result = memberService.newPassword(parameter);
+        if (!result.isResult()) {
+            model.addAttribute("message", result.getMessage());
+            return "common/error";
+        }
+
+        return "redirect:/member/info";
+    }
+
+    /**
+     * 회원 장바구니
+     */
+    @GetMapping("/member/userproduct")
+    public String memberUserProduct(Model model, Principal principal) {
+
+        String userId = principal.getName();
+        MemberDto detail = memberService.detail(userId);
+
+        model.addAttribute("detail", detail);
+
+        return "member/userproduct";
     }
 
     /**

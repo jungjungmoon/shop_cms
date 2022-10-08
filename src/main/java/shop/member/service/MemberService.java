@@ -5,6 +5,7 @@ import shop.manager.dto.MemberDto;
 import shop.manager.model.MemberParam;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
+import shop.product.service.impl.ServiceResult;
 
 import java.util.List;
 
@@ -43,12 +44,19 @@ public interface MemberService extends UserDetailsService {
     List<MemberDto> list(MemberParam parameter);
 
     /**
-     * 관리자 - 회원상세 페이지 메서드 구현
+     * 1. 관리자 - 회원상세 페이지 메서드 구현
+     * 2. 회원정보 수정 구현 할때, detail 사용
      */
     MemberDto detail(String userId);
 
     /**
-     * 회원 비밀번호 변경 -> 회원 상세페이지 내에서
+     * 관리자 회원 비밀번호 변경 -> 회원 상세페이지 내에서
      */
     boolean updatePassword(String userId, String password);
+
+    /**
+     * 일반회원 비밀번호 변경  -> 회원 정보 에서
+     */
+    ServiceResult newPassword(MemberInput parameter);
+
 }
