@@ -22,6 +22,7 @@ import shop.member.model.ResetPasswordInput;
 
 import shop.member.repository.MemberRepository;
 import shop.member.service.MemberService;
+import shop.product.service.impl.ServiceResult;
 
 import javax.swing.plaf.basic.BasicViewportUI;
 import java.time.LocalDateTime;
@@ -283,6 +284,31 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         return true;
+    }
+
+    /**
+     * 일반회원 비밀번호 변경 - 회원정보
+     */
+    @Override
+    public ServiceResult newPassword(MemberInput parameter) {
+
+        String userId = parameter.getUserId();
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return new ServiceResult(false, " 회원 정보가 존재하지 않습니다. " + " 다시 확인해 주십시오. ");
+        }
+
+        Member member = optionalMember.get();
+
+        if (!BCrypt.checkpw(parameter.getPassword(), member.getPassword())) {
+            return new ServiceResult(false, " 회원 비밀번호가 일치하지 않습니다. 다시 확인해 주세요 ");
+        }
+        String hashpw = BCrypt.hashpw(parameter.getNewPassword(), BCrypt.gensalt());
+        member.setPassword(hashpw);
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
     }
 
     /**
