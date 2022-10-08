@@ -12,7 +12,6 @@ public interface OrderRepository extends JpaRepository<ProductOrder, Long> {
     /**
      * Order status
      */
-
     long countByProductIdAndUserIdAndStatusIn(long productId, String userId, Collection<String> status);
 
 }

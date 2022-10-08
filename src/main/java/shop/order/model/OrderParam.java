@@ -13,4 +13,7 @@ public class OrderParam extends CommonParam {
      * 주문 관리목록
      */
 
+    long id;
+    String status;
+
 }

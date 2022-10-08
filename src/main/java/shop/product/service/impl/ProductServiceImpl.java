@@ -18,6 +18,7 @@ import shop.product.service.ProductService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -204,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
                 (
                         product.getId(),
                         parameter.getUserId(),
-                        List.of(status)
+                        Arrays.asList(status)
                 );
 
         // 상품주문이 실행, 중복 x

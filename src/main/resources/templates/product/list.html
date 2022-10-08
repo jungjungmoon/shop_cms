@@ -20,6 +20,11 @@
     <script>
         $(function () {
             $('#submitForm').on('submit', function () {
+
+                if (!confirm('상품을 주문하시겠습니까?')){
+                    return false;
+                }
+
                 var $thisForm = $(this);
                 var url = '/api/product/req.api';
                 var parameter = {
@@ -28,6 +33,19 @@
 
                 axios.post(url, parameter).then(function (response) {
                     console.log(response);
+                    console.log(response.data);
+
+                    response.data = response.data || {};
+                    response.data.header = response.data.header || {};
+
+                    if (!response.data.header.result) {
+                        alert(response.data.header.message);
+                        return false;
+                    }
+
+                    alert('상품 주문이 처리되었습니다.');
+                    location.href = '/';
+
 
                 }).catch(function (err) {
                     console.log(err);

@@ -33,7 +33,8 @@
             color: #000;
         }
 
-        .list .buttons .total-count {
+        .list .row-buttons {
+            text-align: center;
         }
 
         .pager {
@@ -53,34 +54,21 @@
     <script>
         $(document).ready(function () {
 
-            $('#selectAll').on('click', function () {
+            $('.row-buttons button').on('click', function () {
 
-                var checked = $(this).is(':checked');
+                var status = $(this).val();
+                var id = $(this).closest('div').find('input[name=id]').val();
 
-                $('#dataList input[type=checkbox]').each(function (k, v){
-
-                    $(this).prop('checked', checked);
-                });
-            });
-
-            $('#delete').on('click', function () {
-
-                var $checked = $('#dataList input[type=checkbox]:checked');
-
-                if ($checked.length < 1) {
-                    alert(' 상품을 삭제하시겠습니까? ');
+                var msg = status == 'COMPLETE' ? '결제완료 되었습니다' : '취소';
+                if (!confirm(msg)){
                     return false;
                 }
 
-                var idList = [];
-                $.each($checked, function (k, v) {
-                    idList.push($(this).val());
+                var $orderForm = $('#orderForm');
+                $orderForm.find('input[name=id]').val(id);
+                $orderForm.find('input[name=status]').val(status);
+                $orderForm.submit();
 
-                });
-
-                var $deleteForm = $('form[name=deleteForm]');
-                $deleteForm.find('input[name=idList]').val(idList.join(','));
-                $deleteForm.submit();
             });
         });
 
@@ -112,6 +100,9 @@
             <th>
                 주문상태
             </th>
+            <th>
+                비고
+            </th>
 
         </tr>
         </thead>
@@ -119,7 +110,7 @@
         <tr th:each="x : ${list}">
             <td th:text="${x.seq}">1</td>
             <td>
-                <p th:text="${x.regDt}">2021.00.00</p>
+                <p th:text="${x.regDtText}">2021.00.00</p>
             </td>
             <td>
                 <p th:text="${x.subject}">상품명</p>
@@ -136,9 +127,15 @@
             <td>
                 <p th:if="${x.status eq 'REQ'}">상품신청</p>
                 <p th:if="${x.status eq 'CANCEL'}">상품취소</p>
-                <p th:if="${x.status eq 'COMPLETE'}">상품입금완료</p>
+                <p th:if="${x.status eq 'COMPLETE'}">상품결제완료</p>
             </td>
-
+            <td>
+                <div class="row-buttons" th:if="${x.status eq 'REQ'}">
+                    <input type="hidden" name="id" th:value="${x.id}"/>
+                    <button value="COMPLETE" type="button">결제완료</button>
+                    <button value="CANCEL" type="button">결제취소</button>
+                </div>
+            </td>
 
         </tr>
         </tbody>
@@ -148,8 +145,9 @@
     </div>
 </div>
 
-<form name="deleteForm" method="post" action="/manager/product/delete.do">
-    <input type="hidden" name="idList"/>
+<form id="orderForm" method="post" action="/manager/order/status.do">
+    <input type="hidden" name="id"/>
+    <input type="hidden" name="status"/>
 </form>
 
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductOrder implements OrderStatus{
+public class ProductOrder implements OrderStatus {
 
     /**
      * 상품주문 신청
@@ -22,7 +22,7 @@ public class ProductOrder implements OrderStatus{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
-    private Long id;
+    Long id;
     private long productId;
     private String userId;
     // 금액
