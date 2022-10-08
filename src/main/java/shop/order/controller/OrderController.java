@@ -60,7 +60,7 @@ public class OrderController extends BaseController {
      */
 
     @PostMapping("/manager/order/status.do")
-    public String status(Model model, OrderParam parameter, BindingResult bindingResult) {
+    public String status(Model model, OrderParam parameter) {
 
         ServiceResult status = orderService.updateStatus(parameter.getId(), parameter.getStatus());
 
