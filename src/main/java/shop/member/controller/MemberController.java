@@ -11,16 +11,22 @@ import shop.manager.dto.MemberDto;
 import shop.member.model.MemberInput;
 import shop.member.model.ResetPasswordInput;
 import shop.member.service.MemberService;
+import shop.order.dto.OrderDto;
+import shop.order.service.OrderService;
+import shop.product.dto.ProductDto;
+import shop.product.service.ProductService;
 import shop.product.service.impl.ServiceResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor // 자동생성자 주입 -> MemberService
 public class MemberController {
 
     private final MemberService memberService;
+    private final OrderService orderService;
 
     /**
      * 회원 가입 부분
@@ -73,6 +79,19 @@ public class MemberController {
 
         return "member/info";
     }
+    @PostMapping("/member/info")
+    public String memberInfoSubmit(Model model, Principal principal, MemberInput parameter) {
+
+        String userId = principal.getName();
+        parameter.setUserId(userId);
+
+        ServiceResult result = memberService.newMember(parameter);
+        if (!result.isResult()) {
+            model.addAttribute("message", result.getMessage());
+            return "common/error";
+        }
+        return "redirect:/member/info";
+    }
 
     /**
      * 회원 비밀번호 변경
@@ -109,9 +128,10 @@ public class MemberController {
     public String memberUserProduct(Model model, Principal principal) {
 
         String userId = principal.getName();
-        MemberDto detail = memberService.detail(userId);
 
-        model.addAttribute("detail", detail);
+        List<OrderDto> list = orderService.myBasket(userId);
+
+        model.addAttribute("list", list);
 
         return "member/userproduct";
     }

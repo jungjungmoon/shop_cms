@@ -2,12 +2,12 @@ package shop.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import shop.configuration.ResponseResult;
-import shop.configuration.ResponseResultHeader;
 import shop.manager.service.CategoryService;
 import shop.order.model.OrderInput;
 import shop.product.controller.BaseController;
@@ -25,6 +25,7 @@ public class ApiProductController extends BaseController {
     /**
      * 상품주문 신청 api, login 한 값을 찾아 자동 주입
      */
+    @Transactional
     @PostMapping("/api/product/req.api")
     public ResponseEntity<?> productRequest(
             Model model,
@@ -39,7 +40,6 @@ public class ApiProductController extends BaseController {
         ServiceResult result = productService.req(parameter);
 
         if (!result.isResult()) {
-
             ResponseResult responseResult = new ResponseResult(false, result.getMessage());
             return ResponseEntity.ok().body(responseResult);
         }

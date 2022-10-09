@@ -4,6 +4,7 @@ import lombok.*;
 import shop.member.entity.Member;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *  데이터 베이스에서 내리는 테이블 (Member 값들)
@@ -62,5 +63,12 @@ public class MemberDto {
                 .managerYn(member.isManagerYn())
                 .userStatus(member.getUserStatus())
                 .build();
+    }
+
+    public String getRegDtText() {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+        return regDt != null ? regDt.format(dateTimeFormatter) : "";
+
     }
 }

@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 페이지 처리
+     * 관리자만 -> 회원목록처리
      */
     @Override
     public List<ProductDto> list(ProductParam parameter) {
@@ -205,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
                 (
                         product.getId(),
                         parameter.getUserId(),
-                        Arrays.asList(status)
+                        List.of(status)
                 );
 
         // 상품주문이 실행, 중복 x
@@ -219,7 +219,7 @@ public class ProductServiceImpl implements ProductService {
                 .productId(product.getId())
                 .userId(parameter.getUserId())
                 .payPrice(product.getSalePrice())
-                .status(OrderStatus.STATUS_REQ)
+                .status(ProductOrder.STATUS_REQ)
                 .regDt(LocalDateTime.now())
                 .build();
         orderRepository.save(productOrder);
@@ -227,4 +227,5 @@ public class ProductServiceImpl implements ProductService {
         result.setResult(true);
         return result;
     }
+
 }

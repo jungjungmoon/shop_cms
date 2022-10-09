@@ -3,18 +3,14 @@ package shop.product.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import shop.manager.dto.CategoryDto;
 import shop.manager.service.CategoryService;
 import shop.product.dto.ProductDto;
-import shop.product.model.ProductInput;
 import shop.product.model.ProductParam;
 import shop.product.service.ProductService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller

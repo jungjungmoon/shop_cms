@@ -49,4 +49,5 @@ public interface ProductService {
      * 상품주문 신청
      */
     ServiceResult req(OrderInput parameter);
+
 }

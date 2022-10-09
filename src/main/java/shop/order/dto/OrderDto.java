@@ -1,6 +1,7 @@
 package shop.order.dto;
 
 import lombok.*;
+import shop.order.entity.ProductOrder;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,6 +36,20 @@ public class OrderDto {
     long totalCount;
     // 페이지 No 번호 정렬
     long seq;
+
+
+    public static OrderDto of(ProductOrder orderDto) {
+
+        return OrderDto.builder()
+                .id(orderDto.getId())
+                .productId(orderDto.getProductId())
+                .userId(orderDto.getUserId())
+                .payPrice(orderDto.getPayPrice())
+                .status(orderDto.getStatus())
+                .regDt(orderDto.getRegDt())
+                .build();
+
+    }
 
     public String getRegDtText() {
 

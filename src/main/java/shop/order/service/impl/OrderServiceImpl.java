@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import shop.order.dto.OrderDto;
+import shop.order.entity.OrderStatus;
 import shop.order.entity.ProductOrder;
 import shop.order.mapper.OrderMapper;
 import shop.order.model.OrderParam;
@@ -21,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
 
+    /**
+     * 관리자 - 회원 주문관리 목록
+     */
     @Override
     public List<OrderDto> list(OrderParam parameter) {
 
@@ -41,6 +45,9 @@ public class OrderServiceImpl implements OrderService {
         return list;
     }
 
+    /**
+     * 관리자 - 주문 상태 변경
+     */
     @Override
     public ServiceResult updateStatus(long id, String status) {
 
@@ -52,6 +59,48 @@ public class OrderServiceImpl implements OrderService {
         ProductOrder productOrder = optionalProductOrder.get();
 
         productOrder.setStatus(status);
+        orderRepository.save(productOrder);
+
+        return new ServiceResult(true);
+    }
+
+    /**
+     * 내 장바구니
+     */
+    @Override
+    public List<OrderDto> myBasket(String userId) {
+
+        OrderParam orderParam = new OrderParam();
+        orderParam.setUserId(userId);
+        List<OrderDto> list = orderMapper.selectMyBasket(orderParam);
+
+       return list;
+    }
+
+    /**
+     * 내 장바구니 상품 취소
+     */
+    @Override
+    public OrderDto detail(long id) {
+
+        Optional<ProductOrder> productOrders = orderRepository.findById(id);
+        if (productOrders.isPresent()){
+            return OrderDto.of(productOrders.get());
+        }
+        return null;
+    }
+
+    @Override
+    public ServiceResult del(long id) {
+
+        Optional<ProductOrder> productOrders = orderRepository.findById(id);
+        if (productOrders.isPresent()){
+            return new ServiceResult(false, "상품이 없습니다.");
+        }
+
+        ProductOrder productOrder = productOrders.get();
+
+        productOrder.setStatus(OrderStatus.STATUS_CANCEL);
         orderRepository.save(productOrder);
 
         return new ServiceResult(true);

@@ -20,7 +20,7 @@ public class ProductOrder implements OrderStatus {
      * 상품주문 신청
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     Long id;
     private long productId;
