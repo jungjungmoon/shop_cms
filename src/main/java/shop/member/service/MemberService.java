@@ -21,9 +21,14 @@ public interface MemberService extends UserDetailsService {
 
 
     /**
-     * 일반회원 비밀번호 변경  -> 회원 정보 에서
+     * 일반회원 비밀번호 변경  -> 회원정보에서
      */
     ServiceResult newPassword(MemberInput parameter);
+
+    /**
+     * 일반회원 정보 변경 -> 회원정보에서
+     */
+    ServiceResult newMember(MemberInput parameter);
 
 }
 

@@ -17,4 +17,19 @@ public interface OrderService {
      */
     ServiceResult updateStatus(long id, String status);
 
+    /**
+     * 상품 장바구니
+     */
+    List<OrderDto> myBasket(String userId);
+
+    /**
+     * 상품상세정보
+     */
+    OrderDto detail(long id);
+
+    /**
+     * 상품 삭제처리
+     */
+    ServiceResult del(long id);
+
 }

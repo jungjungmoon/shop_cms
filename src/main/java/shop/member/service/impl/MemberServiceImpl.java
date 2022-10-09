@@ -218,9 +218,7 @@ public class MemberServiceImpl implements MemberService {
         if (member.getResetPasswordLimitDt().isBefore(LocalDateTime.now())){
             throw new RuntimeException(" 비밀번호 변경 날짜가 아닙니다. ");
         }
-
         return true;
-
     }
 
     /**
@@ -244,7 +242,6 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         return list;
-
     }
 
     /**
@@ -260,7 +257,6 @@ public class MemberServiceImpl implements MemberService {
         
         Member member = optionalMember.get();
         return MemberDto.of(member);
-
     }
 
     /**
@@ -309,6 +305,27 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         return new ServiceResult(true);
+    }
+
+    @Override
+    public ServiceResult newMember(MemberInput parameter) {
+
+        String userId = parameter.getUserId();
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return new ServiceResult(false, " 회원 정보가 존재하지 않습니다. " + " 다시 확인해 주십시오. ");
+        }
+        Member member = optionalMember.get();
+
+        member.setPhone(parameter.getPhone());
+        member.setAddress(parameter.getAddress());
+        member.setDetailAddress(parameter.getDetailAddress());
+        member.setPostcode(parameter.getPostcode());
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
+
     }
 
     /**

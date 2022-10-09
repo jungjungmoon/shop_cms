@@ -16,7 +16,6 @@
         from product_order
         where 1 = 1
         <include refid="selectListWhere"/>
-
     </select>
 
 
@@ -37,5 +36,19 @@
 
         limit #{pageStart}, #{pageEnd}
     </select>
+
+    <select id="selectMyBasket"
+            parameterType="shop.order.model.OrderParam"
+            resultType="shop.order.dto.OrderDto">
+
+        select product_order.*
+        , p.subject
+        from product_order
+        join product p on product_order.product_id = p.id
+        where product_order.user_id = user_id
+        order by reg_dt desc
+
+    </select>
+
 
 </mapper>

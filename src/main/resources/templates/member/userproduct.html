@@ -3,6 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>SHOP 회원 정보</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.row-buttons button').on('click', function () {
+
+                var id = $(this).val();
+
+                var msg = '주문 취소하시겠습니까';
+                if (!confirm(msg)){
+                    return false;
+                }
+
+                var url = '/api/member/product/cancel.api';
+                var parameter = {
+                    productOrderId: id
+                };
+
+                axios.post(url, parameter).then(function (response) {
+                    console.log(response);
+                    console.log(response.data);
+
+                    response.data = response.data || {};
+                    response.data.header = response.data.header || {};
+
+                    if (!response.data.header.result) {
+                        alert(response.data.header.message);
+                        return false;
+                    }
+
+                    alert('상품 주문이 취소되었습니다.');
+                    location.reload();
+
+                }).catch(function (err) {
+                    console.log(err);
+
+                });
+
+                return false;
+            });
+        });
+
+    </script>
 </head>
 <body>
 <h1>SHOP 회원 정보</h1>
@@ -18,11 +74,53 @@
     <hr/>
 </div>
 
-<div th:text="${detail}">
+<div class="list">
 
-</div>
+    <table>
+        <thead>
+        <tr>
+            <th> NO</th>
+            <th>
+                등록시간
+            </th>
+            <th>
+                상품명
+            </th>
+            <th>
+                주문상태
+            </th>
+            <th>
+                비고
+            </th>
+        </tr>
+        </thead>
+        <tbody id="dataList">
+        <tr th:each="x, i : ${list}">
+            <td th:text="${i.index + 1}">1</td>
+            <td>
+                <p th:text="${x.regDtText}">2021.00.00</p>
+            </td>
+            <td>
+                <p th:text="${x.subject}">상품명</p>
+            </td>
+            <td>
+                <p th:if="${x.status eq 'REQ'}">상품신청</p>
+                <p th:if="${x.status eq 'CANCEL'}">상품취소</p>
+                <p th:if="${x.status eq 'COMPLETE'}">상품결제완료</p>
+            </td>
+            <td>
+                <div class="row-buttons" th:if="${x.status eq 'REQ'}">
+                    <button type="button" th:value="${x.id}">결제취소</button>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
 
 </br>
+</div>
 
 </body>
 </html>

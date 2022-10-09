@@ -9,5 +9,6 @@ public class OrderInput {
 
     long productId;
     String userId;
+    long productOrderId;
 
 }

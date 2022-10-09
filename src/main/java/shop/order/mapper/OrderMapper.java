@@ -18,4 +18,9 @@ public interface OrderMapper {
      * 페이징 갯수 카운트
      */
     long selectListCount(OrderParam parameter);
+
+    /**
+     * 내 장바구니
+     */
+    List<OrderDto> selectMyBasket(OrderParam parameter);
 }
