@@ -2,6 +2,7 @@ package shop.product.service;
 
 import shop.order.model.OrderInput;
 import shop.product.dto.ProductDto;
+import shop.product.entity.Product;
 import shop.product.model.ProductInput;
 import shop.product.model.ProductParam;
 import shop.product.service.impl.ServiceResult;
@@ -49,5 +50,10 @@ public interface ProductService {
      * 상품주문 신청
      */
     ServiceResult req(OrderInput parameter);
+
+    /**
+     * 전체 상품 목록
+     */
+    List<ProductDto> listAll();
 
 }

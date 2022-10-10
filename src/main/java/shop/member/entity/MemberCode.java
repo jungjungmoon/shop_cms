@@ -16,4 +16,7 @@ public interface MemberCode {
     // 회원 현재가입 요청상태
     String MEMBER_STATUS_REQ = "REQ";
 
+    // 회원 탈퇴
+    String MEMBER_STATUS_SECESSION = "SECESSION";
+
 }

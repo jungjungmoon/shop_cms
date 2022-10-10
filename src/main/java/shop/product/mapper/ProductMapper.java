@@ -1,8 +1,6 @@
 package shop.product.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import shop.order.dto.OrderDto;
-import shop.order.model.OrderParam;
 import shop.product.dto.ProductDto;
 import shop.product.model.ProductParam;
 

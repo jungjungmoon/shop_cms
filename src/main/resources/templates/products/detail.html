@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>SHOP 상품상세</title>
+    <title>SHOP 상품 목록</title>
     <style>
         .detail table {
             width: 100%;
@@ -22,7 +22,7 @@
 
             $('#submitForm').on('submit', function () {
 
-                if (!confirm('상품을 주문하시겠습니까?')){
+                if (!confirm('상품을 주문하시겠습니까?')) {
                     return false;
                 }
 
@@ -32,7 +32,8 @@
                     productId: $thisForm.find('input[name=id]').val()
                 };
 
-                axios.post(url, parameter).then(function(response) {
+                parameter = JSON.stringify(parameter);
+                axios.post(url, parameter).then(function (response) {
                     console.log(response);
                     console.log(response.data);
 
@@ -57,30 +58,32 @@
             });
 
         });
-
     </script>
+
 </head>
 <body>
-<h1> SHOP 상품 정보 </h1>
+<h1> SHOP 상품 목록 </h1>
 
 <div th:replace="fragments/layout.html :: fragment-body-menu"></div>
-
-    <h2>상품명: <span th:text="${productDto.subject}">상품</span></h2>
-    <div th:utext="${productDto.contents}">
-    </div>
-    <div>
-        <p>상품가격: <span th:text="${productDto.price}">0</span></p>
-        <p>상품할인: <span th:text="${productDto.salePrice}">0</span></p>
-    </div>
+<div class="detail">
 
     <div>
-        <form id="submitForm" >
-            <input type="hidden" name="id" th:value="${productDto.id}"/>
-            <button type="submit"> 상품 주문</button>
-            <a href="/product">상품 목록</a>
-        </form>
-    </div>
+        <h2>상품명: <span th:text="${detail.subject}">상품</span></h2>
+        <div th:utext="${detail.contents}">
+        </div>
+        <div>
+            <p>상품가격: <span th:text="${detail.price}">0</span></p>
+            <p>상품할인: <span th:text="${detail.salePrice}">0</span></p>
+        </div>
 
+        <div>
+            <form id="submitForm" method="post">
+                <input type="hidden" th:value="${detail.id}" name="id"/>
+                <button type="submit"> 상품 주문</button>
+                <a href="/product">상품 목록</a>
+            </form>
+        </div>
+    </div>
 
 </body>
 </html>

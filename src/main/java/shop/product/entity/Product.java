@@ -20,20 +20,20 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
-    private Long id;
+    Long id;
     // 카테고리 선택
     long categoryId;
 
-    private String imagePath;
-    private String keyword;
-    private String subject;
+    String imagePath;
+    String keyword;
+    String subject;
 
     @Column(length = 1000)
-    private String summary;
+    String summary;
 
     @Lob
     // 큰 데이터를 저장하는데 사용하는 데이터형
-    private String contents;
+    String contents;
     long price;
     long salePrice;
     LocalDate saleEndDt;

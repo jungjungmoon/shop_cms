@@ -1,6 +1,7 @@
 package shop.member.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.Manager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ import shop.manager.dto.MemberDto;
 import shop.manager.mapper.MemberMapper;
 import shop.manager.model.MemberParam;
 import shop.member.entity.Member;
+import shop.member.entity.MemberCode;
 import shop.member.exception.MemberNotEmailAuthException;
 import shop.member.exception.MemberSuspensionNotEmailAuthException;
 import shop.member.model.MemberInput;
@@ -23,6 +25,7 @@ import shop.member.model.ResetPasswordInput;
 import shop.member.repository.MemberRepository;
 import shop.member.service.MemberService;
 import shop.product.service.impl.ServiceResult;
+import shop.util.PasswordUtils;
 
 import javax.swing.plaf.basic.BasicViewportUI;
 import java.time.LocalDateTime;
@@ -297,11 +300,12 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = optionalMember.get();
 
-        if (!BCrypt.checkpw(parameter.getPassword(), member.getPassword())) {
+        if (!PasswordUtils.equals(parameter.getPassword(), member.getPassword())) {
             return new ServiceResult(false, " 회원 비밀번호가 일치하지 않습니다. 다시 확인해 주세요 ");
         }
-        String hashpw = BCrypt.hashpw(parameter.getNewPassword(), BCrypt.gensalt());
-        member.setPassword(hashpw);
+
+        String encPassword = PasswordUtils.encPassword(parameter.getNewPassword());
+        member.setPassword(encPassword);
         memberRepository.save(member);
 
         return new ServiceResult(true);
@@ -329,6 +333,41 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
+     * 일반회원 탈퇴
+     */
+    @Override
+    public ServiceResult secession(String userId, String password) {
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return new ServiceResult(false, "회원정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+
+        if (!PasswordUtils.equals(password, member.getPassword())) {
+           return new ServiceResult(false, "회원 비밀번호가 일치하지 않습니다. 확인후 변경해주세요.");
+        }
+
+        member.setUserName("탈퇴회원");
+        member.setPhone("");
+        member.setPassword("");
+        member.setRegDt(null);
+        member.setEmailAuthYn(false);
+        member.setEmailAuthKey("");
+        member.setEmailAuthDt(null);
+        member.setResetPasswordKey("");
+        member.setResetPasswordLimitDt(null);
+        member.setUserStatus(MemberCode.MEMBER_STATUS_SECESSION);
+        member.setAddress("");
+        member.setDetailAddress("");
+        member.setPostcode("");
+        member.setExtraAddress("");
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
+    }
+
+    /**
      * 로그인 페이지 값들 지정, 시큐리티 지정을 해준다.
      */
     @Override
@@ -351,6 +390,10 @@ public class MemberServiceImpl implements MemberService {
         // 회원 정지상태 일때
         if (Member.MEMBER_STATUS_SUSPENSION.equals(member.getUserStatus())){
             throw new MemberSuspensionNotEmailAuthException("정지된 회원 입니다.");
+        }
+
+        if (Member.MEMBER_STATUS_SECESSION.equals(member.getUserStatus())){
+            throw new MemberSuspensionNotEmailAuthException("탈퇴한 회원 입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

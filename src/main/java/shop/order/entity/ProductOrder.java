@@ -20,16 +20,16 @@ public class ProductOrder implements OrderStatus {
      * 상품주문 신청
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 
     Long id;
-    private long productId;
-    private String userId;
+    long productId;
+    String userId;
     // 금액
-    private long payPrice;
+    long payPrice;
     // 상품신청 신청, 취소, 완료
-    private String status;
-    private LocalDateTime regDt;
+    String status;
+    LocalDateTime regDt;
 
 
 }
