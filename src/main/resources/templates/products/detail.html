@@ -32,7 +32,6 @@
                     productId: $thisForm.find('input[name=id]').val()
                 };
 
-                parameter = JSON.stringify(parameter);
                 axios.post(url, parameter).then(function (response) {
                     console.log(response);
                     console.log(response.data);
@@ -66,6 +65,7 @@
 
 <div th:replace="fragments/layout.html :: fragment-body-menu"></div>
 <div class="detail">
+</div>
 
     <div>
         <h2>상품명: <span th:text="${detail.subject}">상품</span></h2>
@@ -77,8 +77,8 @@
         </div>
 
         <div>
-            <form id="submitForm" method="post">
-                <input type="hidden" th:value="${detail.id}" name="id"/>
+            <form name="submitForm" id="submitForm" method="post" action="/api/product/req.api">
+                <input type="hidden" name="id" th:value="${detail.id}"/>
                 <button type="submit"> 상품 주문</button>
                 <a href="/product">상품 목록</a>
             </form>

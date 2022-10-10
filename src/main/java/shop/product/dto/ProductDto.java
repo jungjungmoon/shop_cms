@@ -3,6 +3,7 @@ package shop.product.dto;
 import lombok.*;
 import shop.product.entity.Product;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,13 +16,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDto {
 
-    Long id;
-    Long categoryId;
-    String imagePath;
-    String keyword;
-    String subject;
-    String summary;
-    String contents;
+    private Long id;
+    private Long categoryId;
+    private String imagePath;
+    private String keyword;
+    private String subject;
+    private String summary;
+    private String contents;
     long price;
     long salePrice;
     LocalDate saleEndDt;
@@ -65,4 +66,6 @@ public class ProductDto {
         return productDtos;
 
     }
+
+
 }

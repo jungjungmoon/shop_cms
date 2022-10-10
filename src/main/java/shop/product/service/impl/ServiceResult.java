@@ -12,6 +12,7 @@ public class ServiceResult {
     boolean result;
     String message;
 
+
     public ServiceResult(boolean result, String message) {
         this.result = result;
         this.message = message;

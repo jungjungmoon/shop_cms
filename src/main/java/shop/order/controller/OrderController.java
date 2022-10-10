@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import shop.order.dto.OrderDto;
 import shop.order.model.OrderParam;
 import shop.order.service.OrderService;
-import shop.order.dto.OrderDto;
 import shop.product.controller.BaseController;
 import shop.product.dto.ProductDto;
-import shop.product.entity.Product;
 import shop.product.service.ProductService;
 import shop.product.service.impl.ServiceResult;
 
@@ -32,12 +30,10 @@ public class OrderController extends BaseController {
     public String list
     (
             Model model,
-            OrderParam parameter,
-            BindingResult bindingResult
+            OrderParam parameter
     ) {
 
         parameter.init();
-
         List<OrderDto> orderDtos = orderService.list(parameter);
 
         // 페이지 처리 갯수 단계
