@@ -20,5 +20,7 @@ public class ProductInput {
     // 상품삭제
     String idList;
 
+    String filename;
+
 
 }

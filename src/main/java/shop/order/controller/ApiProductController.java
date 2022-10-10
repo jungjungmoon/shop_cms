@@ -3,8 +3,9 @@ package shop.order.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import shop.configuration.ResponseResult;
 import shop.manager.service.CategoryService;
 import shop.order.model.OrderInput;
@@ -23,15 +24,17 @@ public class ApiProductController extends BaseController {
     /**
      * 상품주문 신청 api, login 한 값을 찾아 자동 주입
      */
-    @PostMapping("/api/product/req.api")
+
+    @PostMapping(value = "api/product/req.api", consumes = "application/x-www-form-urlencoded")
+    @ModelAttribute
     public ResponseEntity<?> productRequest
     (
             Model model,
             // body -> RequestBody 추가
-            Principal principal,
-            @RequestBody OrderInput parameter
-
+            OrderInput parameter,
+            Principal principal
     ) {
+
         // 내 로그인한 Id -> Principal (login 자동 주입)
         parameter.setUserId(principal.getName());
 
@@ -45,6 +48,7 @@ public class ApiProductController extends BaseController {
 
         ResponseResult responseResult = new ResponseResult(true);
         return ResponseEntity.ok().body(responseResult);
+
     }
 
 }

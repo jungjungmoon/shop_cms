@@ -57,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(parameter.getPrice())
                 .salePrice(parameter.getSalePrice())
                 .saleEndDt(saleEndDt)
+                .filename(parameter.getFilename())
                 .build();
 
         productRepository.save(product);
@@ -122,6 +123,8 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(parameter.getPrice());
         product.setSalePrice(parameter.getSalePrice());
         product.setSaleEndDt(saleEndDt);
+        product.setFilename(parameter.getFilename());
+
         productRepository.save(product);
 
         return true;
@@ -193,7 +196,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> optionalProduct = productRepository.findById(parameter.getProductId());
         if (!optionalProduct.isPresent()) {
 
-            result.setResult(false);
+            result.setResult(true);
             result.setMessage("상품 주문을 할 수 없습니다.");
             return result;
         }
@@ -210,7 +213,7 @@ public class ProductServiceImpl implements ProductService {
 
         // 상품주문이 실행, 중복 x
         if (count > 0) {
-            result.setResult(false);
+            result.setResult(true);
             result.setMessage("주문한 상품이 있습니다.");
             return result;
         }

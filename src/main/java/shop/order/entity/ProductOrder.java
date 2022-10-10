@@ -22,14 +22,15 @@ public class ProductOrder implements OrderStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
-    Long id;
-    long productId;
-    String userId;
+
+    private Long id;
+    private long productId;
+    private String userId;
     // 금액
-    long payPrice;
+    private long payPrice;
     // 상품신청 신청, 취소, 완료
-    String status;
-    LocalDateTime regDt;
+    private String status;
+    private LocalDateTime regDt;
 
 
 }

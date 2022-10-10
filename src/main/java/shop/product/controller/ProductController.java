@@ -1,11 +1,14 @@
 package shop.product.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import shop.manager.service.CategoryService;
 import shop.product.dto.ProductDto;
 import shop.product.model.ProductInput;
@@ -13,10 +16,16 @@ import shop.product.model.ProductParam;
 import shop.product.service.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController extends BaseController {
     private final ProductService productService;
     private final CategoryService categoryService;
@@ -85,10 +94,77 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 파일 날짜 지정
+     */
+    String getNewSaveFile(String basePath, String origin){
+
+        LocalDate now = LocalDate.now();
+
+        String[] dirs = {
+                String.format("%s/%d/", basePath,now.getYear()),
+                String.format("%s/%d/%02d/", basePath,now.getYear(),now.getMonthValue()),
+                String.format("%s/%d/%02d/%02d/", basePath,now.getYear(),now.getMonthValue(),now.getDayOfMonth())};
+
+        for (String dir : dirs) {
+            File file = new File(dir);
+            if (!file.isDirectory()) {
+                file.mkdir();
+            }
+        }
+
+        String fileExtension = "";
+        if (origin != null) {
+            int i = origin.lastIndexOf(".");
+            if (i > -1) {
+                fileExtension = origin.substring(i + 1);
+            }
+        }
+
+        // uuid 로 파일 확장자 진행
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        // 파일 확장자
+        String newFilename = String.format("%s%s", dirs[2], uuid);
+        if (fileExtension.length() > 0) {
+            newFilename += "." + fileExtension;
+        }
+
+        return newFilename;
+    }
+
+    /**
      * 상품등록 페이지
      */
     @PostMapping(value = {"/manager/product/add.do", "/manager/product/edit.do"})
-    public String addSubmit(Model model, ProductInput parameter, HttpServletRequest request) {
+    public String addSubmit
+    (
+            Model model,
+            HttpServletRequest request,
+            MultipartFile files,
+            ProductInput parameter
+
+    ) {
+
+        String saveFilename = "";
+
+        /**
+         * 파일 업로드 저장
+         */
+        if (files != null) {
+
+            String origin = files.getOriginalFilename();
+            String basePath = "C:\\shop_cms\\files";
+            saveFilename = getNewSaveFile(basePath, origin);
+
+            try {
+                File newFile = new File(saveFilename);
+                FileCopyUtils.copy(files.getInputStream(), new FileOutputStream(newFile));
+            } catch (IOException e) {
+                log.info("=============================== - 1");
+                log.info(e.getMessage());
+            }
+        }
+
+        parameter.setFilename(saveFilename);
 
         // 상품 수정
         boolean edit = request.getRequestURI().contains("/edit.do");
