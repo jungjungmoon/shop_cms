@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import shop.manager.dto.MemberDto;
 import shop.member.model.MemberInput;
-import shop.member.model.ResetPasswordInput;
 import shop.member.service.MemberService;
 import shop.order.dto.OrderDto;
 import shop.order.service.OrderService;
@@ -147,6 +146,7 @@ public class MemberController {
         return "member/login";
     }
 
+
     /**
      * 비밀번호 찾기
      */
@@ -234,5 +234,4 @@ public class MemberController {
 
         return "redirect:/member/logout";
     }
-
 }
