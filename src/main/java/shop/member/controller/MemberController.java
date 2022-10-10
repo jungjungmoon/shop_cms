@@ -1,7 +1,6 @@
 package shop.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +12,6 @@ import shop.member.model.ResetPasswordInput;
 import shop.member.service.MemberService;
 import shop.order.dto.OrderDto;
 import shop.order.service.OrderService;
-import shop.product.dto.ProductDto;
-import shop.product.service.ProductService;
 import shop.product.service.impl.ServiceResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +76,7 @@ public class MemberController {
 
         return "member/info";
     }
+
     @PostMapping("/member/info")
     public String memberInfoSubmit(Model model, Principal principal, MemberInput parameter) {
 
@@ -106,6 +104,7 @@ public class MemberController {
 
         return "member/password";
     }
+
     @PostMapping("/member/password")
     public String memberPasswordSubmit(Model model, Principal principal, MemberInput parameter) {
 
@@ -199,13 +198,41 @@ public class MemberController {
 
         boolean result = false;
         try {
-             result = memberService.resetPassword(parameter.getId(), parameter.getPassword());
-        }catch (Exception e) {
+            result = memberService.resetPassword(parameter.getId(), parameter.getPassword());
+        } catch (Exception e) {
         }
 
         model.addAttribute("result", result);
 
         return "member/reset_password_result";
+    }
+
+    /**
+     * 일반회원 탈퇴
+     */
+    @GetMapping("/member/secession")
+    public String memberSecession(Model model) {
+
+        return "member/secession";
+    }
+
+    @PostMapping("/member/secession")
+    public String memberSecessionSubmit
+            (
+                    Model model,
+                    Principal principal,
+                    MemberInput parameter
+            ) {
+
+        String userId = principal.getName();
+
+        ServiceResult result = memberService.secession(userId, parameter.getPassword());
+        if (!result.isResult()){
+            model.addAttribute("message", result.getMessage());
+            return "common/error";
+        }
+
+        return "redirect:/member/logout";
     }
 
 }

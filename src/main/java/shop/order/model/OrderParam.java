@@ -16,5 +16,6 @@ public class OrderParam extends CommonParam {
     long id;
     String status;
     String userId;
+    long productId;
 
 }

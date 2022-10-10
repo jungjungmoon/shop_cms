@@ -3,9 +3,6 @@ package shop.order.dto;
 import lombok.*;
 import shop.order.entity.ProductOrder;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,8 +16,6 @@ public class OrderDto {
     /**
      * 주문 관리
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
     private long productId;
@@ -33,20 +28,21 @@ public class OrderDto {
     private String userName;
     private String phone;
     private String subject;
+
     long totalCount;
     // 페이지 No 번호 정렬
     long seq;
 
 
-    public static OrderDto of(ProductOrder orderDto) {
+    public static OrderDto of(ProductOrder productOrder) {
 
         return OrderDto.builder()
-                .id(orderDto.getId())
-                .productId(orderDto.getProductId())
-                .userId(orderDto.getUserId())
-                .payPrice(orderDto.getPayPrice())
-                .status(orderDto.getStatus())
-                .regDt(orderDto.getRegDt())
+                .id(productOrder.getId())
+                .productId(productOrder.getProductId())
+                .userId(productOrder.getUserId())
+                .payPrice(productOrder.getPayPrice())
+                .status(productOrder.getStatus())
+                .regDt(productOrder.getRegDt())
                 .build();
 
     }

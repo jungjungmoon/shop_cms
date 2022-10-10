@@ -205,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
                 (
                         product.getId(),
                         parameter.getUserId(),
-                        List.of(status)
+                        Arrays.asList(status)
                 );
 
         // 상품주문이 실행, 중복 x
@@ -225,7 +225,15 @@ public class ProductServiceImpl implements ProductService {
         orderRepository.save(productOrder);
 
         result.setResult(true);
+        result.setMessage("");
         return result;
+    }
+
+    @Override
+    public List<ProductDto> listAll() {
+
+        List<Product> products = productRepository.findAll();
+        return ProductDto.of(products);
     }
 
 }

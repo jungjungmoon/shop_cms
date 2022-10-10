@@ -5,6 +5,7 @@
 <mapper namespace="shop.order.mapper.OrderMapper">
 
     <sql id="selectListWhere">
+        and p.id = #{productId}
 
     </sql>
 
@@ -13,27 +14,27 @@
             resultType="long">
 
         select count(*)
-        from product_order
+        from product_order po
+            join product p on po.product_id = p.id
+            join member m on po.user_id = m.user_id
         where 1 = 1
         <include refid="selectListWhere"/>
     </select>
-
 
     <select id="selectList"
             parameterType="shop.order.model.OrderParam"
             resultType="shop.order.dto.OrderDto">
 
-        select product_order.*
-        , p.subject
-        , m.user_name
-        , m.phone
-        from product_order
-        join product p on product_order.product_id = p.id
-        join member m on product_order.user_id = m.user_id
+        select po.*
+            , p.subject
+            , m.user_name
+            , m.phone
+        from product_order po
+            join product p on po.product_id = p.id
+            join member m on po.user_id = m.user_id
         where 1 = 1
-        <include refid="selectListWhere"/>
+             <include refid="selectListWhere"/>
         order by reg_dt desc
-
         limit #{pageStart}, #{pageEnd}
     </select>
 
@@ -41,14 +42,13 @@
             parameterType="shop.order.model.OrderParam"
             resultType="shop.order.dto.OrderDto">
 
-        select product_order.*
-        , p.subject
-        from product_order
-        join product p on product_order.product_id = p.id
-        where product_order.user_id = user_id
+        select po.*
+            , p.subject
+        from product_order po
+            join product p on po.product_id = p.id
+        where po.user_id = #{userId}
         order by reg_dt desc
 
     </select>
-
 
 </mapper>

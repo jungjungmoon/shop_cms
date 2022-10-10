@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 사용자 의지와 무관하게 공격자의 의도대로 서버에 특정 요청을 하도록 함, csrf 추가, 보안적 이슈가 있음
         http.csrf().disable();
-        http.cors().disable();
+//        http.cors().disable();
         http.headers().frameOptions().sameOrigin();
 
         // 로그인 권한을 모두 허용 하겠다 -> / , /** 이 모든 페이지에 대해 접근 가능
@@ -66,6 +66,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling()
                 .accessDeniedPage("/error/denied");
+
+//        http.csrf()
+//                .ignoringAntMatchers("/api/product/req.api")
+//                .ignoringAntMatchers("/product/{id}");
+
 
         super.configure(http);
     }

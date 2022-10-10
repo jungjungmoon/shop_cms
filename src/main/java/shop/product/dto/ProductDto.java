@@ -15,13 +15,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDto {
 
-    private Long id;
-    private Long categoryId;
-    private String imagePath;
-    private String keyword;
-    private String subject;
-    private String summary;
-    private String contents;
+    Long id;
+    Long categoryId;
+    String imagePath;
+    String keyword;
+    String subject;
+    String summary;
+    String contents;
     long price;
     long salePrice;
     LocalDate saleEndDt;
@@ -55,7 +55,7 @@ public class ProductDto {
 
     public static List<ProductDto> of(List<Product> products) {
 
-        if (products == null){
+        if (products == null) {
             return null;
         }
         List<ProductDto> productDtos = new ArrayList<>();

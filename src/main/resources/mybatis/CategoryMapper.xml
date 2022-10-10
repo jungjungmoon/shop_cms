@@ -7,7 +7,7 @@
     <select id="select" resultType="shop.manager.dto.CategoryDto">
 
         select c.*
-        ,(select count(*) from product where category_id = c.id) as product_count
+            ,(select count(*) from product where category_id = c.id) as product_count
         from category c
         where using_yn = 1
         order by sort_value desc

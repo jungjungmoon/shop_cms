@@ -64,4 +64,8 @@ public interface MemberService extends UserDetailsService {
      */
     ServiceResult newMember(MemberInput parameter);
 
+    /**
+     * 일반회원 탈퇴
+     */
+    ServiceResult secession(String userId, String password);
 }
